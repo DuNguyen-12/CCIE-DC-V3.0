@@ -1,0 +1,15 @@
+ - DCNM is not working properly, credentials are validated, but whenever you tried to select the device for apply the template, it does not work.
+ - script it is different than the ones discussed before.
+ - switch profile in ACI does not work as expected, must do manual way
+ - question different than spoto in some aspects i would say
+ - read carefully what question cisco is asking
+ - no ask regards of RR, very strange
+ - spend time at the very beginning trying to find the host for the nexus section and locate where is everything
+ - read carefully UCS section as well
+ - ACI is easy but read carefully everything, names, contract, etc
+ - NEXUS part also is tricky since no config in N7K-DC1 and DC2. 
+ - no config in BGW about BGP
+ - no config in BGW about BGP IN dc2
+ - IPN AS you can find login into the device
+ - n7K deployments are based on VDCs, carefully about it
+ btw, the nexus device are based on vdc, so you will need to use swtichto . The n7k dc1 , n7kdc2 and IPN are used for vdc
