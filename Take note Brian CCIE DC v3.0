@@ -1,0 +1,30 @@
+Lab environment.
+- The Design will take 3 hours max and whenever you finish the last question, 
+DOO time will count right after that even you dont agree yet with the term and click OK to start it. SO, BE CAREFULL.
+- I suggest you finish the Design in 1,5hours or less then STOP at the SECOND last question (the last question is END section and will start the DOO immediately). 
+1,5hours left on the Design, try to type all the commands for every devices of NXOS section 
+from scratch (EVEN THE PRE-CONFIGURATION you can learn from the practice lab) then when you start NXOS, 
+either lab1 or lab2, you just need to adjust some variables on the text files, 
+that will save you tons of time. THIS IS VERY IMPORTANT
+- Check reachability of all devices + GUI accessing before you start the DOO. 
+PING is not enough. If you see you can ping but cant access the GUI, kindly ask proctor immediately.
+- A bit slow, expecially with GUI (ACI,UCSM,..) some time i had to click the submit few times to get it done.
+- Test PC need to zoom out to see everything clearly for GUI (ACI,UCSM,..), but then took time to navigate to the other device CLIs .
+- The TEST PC is not the physical PC you are working on, its on the web browser with other devices CLIs.
+Basically, you need open 3 browser windows. Should not open more than that, if you got kicked out of the citrix, you lost the text file.
+   + 1 for devices
+   + 1 for topology and general infor (vlan,SAN,topo,..)
+   + 1 for tasks which will have 3 main sections (NXOS,UCS,ACI)
+- I suggest before starting nxos configuration, start DCNM first to make sure you can see and can select the DC1-N7K to add the interface.
+   + uncheck fabric monitoring mode
+   + update password
+   + validate
+   + re-sync > save & deploy --> i couldnt do this since i dont know it will blow out my previous configuration so thats why i suggest to do in first place.   
+- Over cli, you have to right click, copy then paste. This behavior will take time if you familiar with the old way (bold out = copy in SecureCRT or putty), 
+practice this way. I got sever times to put the wrong commands, since i thought bold the text = copy :)).
+- Script, i suggest you to learn the whole file which is gw-pythoninitial.py on DC2-N9K (practice lab), my case, 
+they removed some parts. i skipped this since there is no time. Do not move when insert mode, it will create weird charactor.
+Insert and type only, want to move? press ESC then move to the place you want then Insert mode. Practice this.
+- Dont try more than 5-10mins on 1 issue, leave it then do later.
+- SAVE configuration after every question.
+- Lastly, the design must be stable, otherwise you will fail even DOO you got 100%. 
