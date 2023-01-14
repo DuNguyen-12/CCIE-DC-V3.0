@@ -1,0 +1,63 @@
+when you open APIC you will see two Tenants: Tenant1 and Xandar
+
+in the questions themselves them never say which tenant you should use
+
+The only thing they say is that you cannot create new policies or EPGs
+
+so, Tenant1 does not have any EPG configured, and tenant Xandar does...so I did the configs in tenant Xandar and I assume that I did it right (like SPOTO WB)
+
+
+
+
+Problem1:
+yes...you have to fix the DVS, problems on discovery of hosts. There is a policy called "lldp_enable" which actually has the LLDP transmit and receive disabled
+
+ACI important:
+in the exam and in the Spoto WB, the contract are already preconfigured in tenant common, and Spoto tells us to use those contract, just correcting the problems in the filters. IN THE EXAM, they say that it must not be possible to reuse those contracts to VRF leaking
+
+PROBLEM2: MULTICAST
+IPN has the issue for MPOD that Spoto mentioned...the interfaces are not in the PIM process, just that
+
+PROBLEM3: 
+oh...there is a issue on the BGP ASN right
+
+PROBLEEM ABOUT ROUTE TO BE EXPORTED INTO BGP:
+
+yes I did it with advertise host routes and route-map on L3Out only allowing the /32 prefix, they dont say anything about creating new VRFs, so I did everything in VRF default
+
+so, no leaking was needed, they don't tell to create it and the BDs and L3out are associated to VRF default from tenant common as it is in LAB1+ from Spoto WB
+
+
+UCS:
+well, they say that you need to create a local disk config policy called CCIE-local to SP attached to the server of Slot1/1
+but, to be honest, that policy was already created you just need to verify the policy config see if it match the requirements and associate the policy to the SP for Server from slot1/1.
+
+SP Template is not created. I had to do it. I did the zoning with pwwns not aliaS no requirement for thaT. that is the strange part....they never ask for connectivity, and they never mention that you need to open the ESXi you have just booted
+
+I assume that once you got SANboot working fine, you are done
+
+DCNM:
+DCNM seems to be very very easy. It makes you think if you are not missing anything ehehe , just change an IP address on an interface of the IPN 2 mins to do it. well the BGP IPv4 unicast between BGW1 and IPN does not come up because the IP is incorrect
+
+Script is like LAB1 in the ACI, use Ansible
+
+he script I got was the one for ACI
+
+you have to use a specific VM for that purpose
+
+you only have vi or vim installed
+
+additionally it seems that you can also use WinSCP, but I didn't realize that
+
+I did the unbind of the template for SP2, because it is an updating template, and for SP2 we need to change the SAN config in order to boot from SAN
+
+
+you just need to complete it with the EPG part
+
+
+
+
+Nexus:
+another strange thing: in the NXOS part they say that you have to configure only 3 VLANs/VLAN interfaces
+
+LDAP - Exactly as SPOTO
