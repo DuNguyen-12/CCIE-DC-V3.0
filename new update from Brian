@@ -1,0 +1,97 @@
+DOO
+1.NXOS
+- Connection as we have known, no change
+- vpc is there om both N5k but we need to add
+  + ip arp sync and delay restore 150
+  + need to configure vpc peer-link
+  + vpc 100,200 need to allow vlan 101-104 and spanning tree type edge trunk
+- OSPF 
+  + Most are configure with process DATACENTER, we just need to adjust few intefaces on 1 or 2 devices
+  + MTU 9192 need to add on needed interface on DC1 devices
+  + Loopback0 on all DC1 devices have been configured properly
+  + Need to add router ID on each device at DC1 same with L0
+  + DC2-N9K has pre-configured loopback0 ip 10.9.1.2/32
+  + DC2-N7K1 has pre-configured loopback ip 10.0.7.2/32 and loopbackx with 7.7.7.1/32
+
+- PIM
+  + same as SPOTO BUM RP 100.0.0.1 (DC1) and 200.0.0.1 (DC2)
+  + DC1-N7K1 has interface loopback254 is pre-configured with ip 100.0.0.1/32, loopback254 on DC1-N7K2 is pre-configured 10.0.10.x/32
+  + DC2-N7K1 int loopback200 pre-configured ip 200.0.0.1/32
+- VXLAN
+  + There is no bgp at all on all devices in both DC1 and DC2, need to configure everything for BGP.
+  + Route-map has been pre-configured on N5Ks and BGWs, DC2-N7K
+  + IPN has known configuration
+  + Add features, vlans, evpn, nve1, vrf XANDAR,..as SPOTO
+  + Issue: I got this part on DC2-N7K, i thought it makes all vni are down when "show nve vni". It said, Admin state is Up / Operation state is Down. I configured: bridge-domain, vni, matching vni with bridge-domain, int nve1, evpn,...
+       ########################
+	   This part is for host testing which is in vlan 101
+       DC2-N7K1
+       encapsulation profile vni VM
+         dot1q 101  vni 10101
+       !
+       interface Ethernet4/xx
+         no shutdown
+         service instance 1 vni
+           encapsulation profile VM default
+	https://www.cisco.com/c/en/us/td/docs/switches/datacenter/nexus7000/sw/vxlan/config/cisco_nexus7000_vxlan_config_guide_8x/configuring-vxlan-bgp-evpn.html
+       ########################
+   + N9K BGW missing command "evpn multisite border-gateway xxx". Need to add "multisite ingress-replication" for each vni
+     
+- Script:
+  + This part is missing, need to remember to type them all in
+     ########################
+     if interfaceIpaddress:
+                 #set ip address
+                 ipaddress=switch.set_ipaddress(interfaceIpaddress)
+     
+                 #set Description
+            
+                 #set mode and state
+                 switch.set_state(interfaceState)
+     
+             print "After interface Configuration"
+             configurationResults=switch.config()
+             print configurationResults
+     
+             if vlan_id:
+                 v=Vlan()
+                 print "Before adding Vlan"
+                 print v.show_vlan().get_vlans()
+                 print "\nCreating Vlan with vlan id %s" %vlan_id
+             v.create_vlan(vlan_id)
+             print"After adding Vlan"
+             print v.show_vlan().get_vlans()
+     ##########################
+
+- DCNM:
+  + Even uncheck "Fabric monitor mode", update the password, validate successfully, the device DC1-N7K1 still not appears.
+  + Re-sync Fabric --> Save & Deploy will return an error.
+- NTP, Jumbo frame, Syslog: same with SPOTO
+
+2. UCS
+- Connections are same
+- Ask to configure Po100 and Po200 to carry all VLANs from nxos section 101-104
+- Ask to create vlan 10-13 (same with SPOTO) and add to uplink e1/12 which is connect to N5K3/4 port 1/4 (dont remember exactly). This port on N5K has configuration
+   ############################
+   interface e1/x
+     switchport
+	 switchport mode trunk
+	 switchport trunk allowed vlan 10-13
+   ############################
+==> VNIC-A/B should have vlan 10-13 as SPOTO /  vlan 101-104 should be added to Web-vNIC-Templates????
+- VNIC/VHBA/POOLs are same as SPOTO, UUID has been pre-configured
+- VSAN-A (50) and VSAN-B (60) on fc30 both FIs
+- Add UUID LINK policy as SPOTO, no lacp policy mention.
+- WEB-SRVR-TEMP is preconfigured and is updating template, WEB-SRVR1 is binded to server 1/2. Update vnic, vhba,wwnn are same with SPOTO
+- Clone WEB-SRVR-TEMP to WESX-SRVR-TEMP and create SP ESX-SRVR01, this will be bind to server 1/1.
+- Make boot from SAN for ESX-SRVR01, name vHBA-1 and vHBA-2
+- On N5K3/4 there are vsan 50/60 pre-configured but wrong name, messy mem pwwn setup.
+- vsan 50 and vsan 60 are pre-configured and interfaces are mapping and all up
+- There are 2 flogi on the storage side which are 50:xx and 20:xx on both N5K, i choosed the one with 20:xx but didnt work, have no time to check it.
+- On N5K3/4, asks to create DC_vsan_50 and DC_vsan_60 zone/zoneset
+- Boot from SAN as SPOTO with vHBA-1 (end with :10) and vHBA-2 (end with :11)
+- FC span as SPOTO
+- Multi choice questions as SPOTO
+
+ACI. 
+no update/all same as SPOTO and works as expected.
